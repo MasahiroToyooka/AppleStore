@@ -8,7 +8,9 @@
 
 import UIKit
 
-class AppsHeaderHorizontalController: BaseListController, UICollectionViewDelegateFlowLayout {
+class AppsHeaderHorizontalController: HorizontalSnappingController, UICollectionViewDelegateFlowLayout {
+    
+    var socialApps = [SocialApp]()
     
     private let cellId = "cellId"
     
@@ -18,20 +20,20 @@ class AppsHeaderHorizontalController: BaseListController, UICollectionViewDelega
         collectionView.backgroundColor = .white
         
         collectionView.register(AppsHeaderCell.self, forCellWithReuseIdentifier: cellId)
-        
-        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            
-            layout.scrollDirection = .horizontal
-        }
+        collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return socialApps.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! AppsHeaderCell
+        let socialApp = self.socialApps[indexPath.item]
+        cell.companyLabel.text = socialApp.name
+        cell.titleLabel.text = socialApp.tagline
+        cell.imageView.sd_setImage(with: URL(string: socialApp.imageUrl))
         return cell
     }
     
@@ -40,6 +42,6 @@ class AppsHeaderHorizontalController: BaseListController, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: 0, left: 16, bottom: 0, right: 0)
+        return .init(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
